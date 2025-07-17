@@ -42,16 +42,12 @@ AI-Powered-Resume-Analyzer/
 
 🚀 Getting Started
 🔧 Installation
-bash
-Copy
-Edit
+
 git clone https://github.com/AbhinashRao/AI-Powered-Resume-Analyzer.git
 cd AI-Powered-Resume-Analyzer
 pip install -r requirements.txt
 ▶️ Run the Application
-bash
-Copy
-Edit
+
 python app.py
 Then open: http://localhost:5000 in your browser.
 
@@ -59,8 +55,6 @@ Then open: http://localhost:5000 in your browser.
 The Random Forest classifier was trained on cleaned and labeled resume data, transformed using TF-IDF.
 
 python
-Copy
-Edit
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 🤝 Contributing
