@@ -171,6 +171,24 @@
             margin: 1.5rem 0;
         }
 
+        .feedback-card {
+            margin-top: 2rem;
+            background-color: #e7f4ff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .feedback-card h3 {
+            color: #014169;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-card p {
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
         @media (max-width: 768px) {
             .results-section {
                 grid-template-columns: 1fr;
@@ -245,6 +263,13 @@
                 </ul>
             </div>
             {% endif %}
+        </div>
+        {% endif %}
+
+        {% if ai_feedback %}
+        <div class="feedback-card">
+            <h3><i class="fas fa-lightbulb"></i> AI Suggestions to Improve Your Resume:</h3>
+            <p>{{ ai_feedback }}</p>
         </div>
         {% endif %}
     </div>
