@@ -1,7 +1,13 @@
 from flask import Flask, request, render_template
-from PyPDF2 import PdfReader
+from PyPDF2 import PdfReader # type: ignore
 import re
 import pickle
+import google.generativeai as genai
+import os
+
+# Set your Gemini API key
+genai.configure(api_key="AIzaSyDIc7IM_MejG47VbeYo-IIAFs6OJ3R-lBU")
+
 
 app = Flask(__name__)
 
@@ -17,7 +23,7 @@ def cleanResume(txt):
     cleanText = re.sub('RT|cc', ' ', cleanText)
     cleanText = re.sub('#\S+\s', ' ', cleanText)
     cleanText = re.sub('@\S+', '  ', cleanText)
-    cleanText = re.sub('[%s]' % re.escape("""!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"""), ' ', cleanText)
+    cleanText = re.sub('[%s]' % re.escape("""!"#$%&'()*+,-./:;<=>?@[\]^_{|}~"""), ' ', cleanText)
     cleanText = re.sub(r'[^\x00-\x7f]', ' ', cleanText)
     cleanText = re.sub('\s+', ' ', cleanText)
     return cleanText
@@ -43,9 +49,11 @@ def pdf_to_text(file):
         text += reader.pages[page].extract_text()
     return text
 
+
+
+
 # resume parsing
 import re
-
 def extract_contact_number_from_resume(text):
     contact_number = None
 
@@ -218,8 +226,24 @@ def extract_name_from_resume(text):
         name = match.group()
 
     return name
+def get_resume_feedback_from_gemini(resume_text):
+    prompt = f"""
+    You are a professional resume reviewer.
 
+    Analyze the following resume content:
+    \"\"\"{resume_text}\"\"\"
 
+    1. Provide a 3-4 line professional summary of the candidate.
+    2. Suggest 3–5 specific improvements to enhance this resume.
+    Keep the tone polite and constructive.
+    """
+
+    try:
+        model = genai.GenerativeModel('gemini-1.5-flash-latest')
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        return f"AI feedback unavailable. Error: {str(e)}"
 
 
 # routes===============================================
@@ -245,17 +269,30 @@ def pred():
         else:
             return render_template('resume.html', message="Invalid file format. Please upload a PDF or TXT file.")
 
+        # Run model predictions and extractions
         predicted_category = predict_category(text)
         recommended_job = job_recommendation(text)
         phone = extract_contact_number_from_resume(text)
         email = extract_email_from_resume(text)
-
         extracted_skills = extract_skills_from_resume(text)
         extracted_education = extract_education_from_resume(text)
         name = extract_name_from_resume(text)
 
-        return render_template('resume.html', predicted_category=predicted_category,recommended_job=recommended_job,
-                               phone=phone,name=name,email=email,extracted_skills=extracted_skills,extracted_education=extracted_education)
+        # Step 5: Call Gemini to get smart feedback
+        ai_feedback = get_resume_feedback_from_gemini(text)
+
+        # Step 6: Send all data to the HTML template
+        return render_template(
+            'resume.html',
+            predicted_category=predicted_category,
+            recommended_job=recommended_job,
+            phone=phone,
+            name=name,
+            email=email,
+            extracted_skills=extracted_skills,
+            extracted_education=extracted_education,
+            ai_feedback=ai_feedback
+        )
     else:
         return render_template("resume.html", message="No resume file uploaded.")
 
