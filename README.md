@@ -46,10 +46,10 @@ AI-Powered-Resume-Analyzer/
 ## 🚀 Getting Started
 
 ### 🔧 Installation
-
 git clone https://github.com/AbhinashRao/AI-Powered-Resume-Analyzer.git
 cd AI-Powered-Resume-Analyzer
 pip install -r requirements.txt
+
 
 ▶️ Run the Application
 python app.py
@@ -74,5 +74,7 @@ This project is open source and available under the MIT License.
 
 🙋‍♂️ Author
 Abhinash Rao Madikonda
+
 📧 abhinashrao28@gmail.com
+
 🔗 LinkedIn • GitHub
