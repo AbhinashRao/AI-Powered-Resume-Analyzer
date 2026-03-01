@@ -47,6 +47,7 @@ AI-Powered-Resume-Analyzer/
 
 ### 🔧 Installation
 git clone https://github.com/AbhinashRao/AI-Powered-Resume-Analyzer.git
+
 cd AI-Powered-Resume-Analyzer
 pip install -r requirements.txt
 
@@ -57,8 +58,6 @@ Then open: http://localhost:5000 in your browser.
 
 📊 Model Training (Optional)
 The Random Forest classifier was trained on cleaned and labeled resume data, transformed using TF-IDF.
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.ensemble import RandomForestClassifier
 
 💡 Gemini AI Resume Suggestions (New Feature)
 We’ve added Gemini AI to:
